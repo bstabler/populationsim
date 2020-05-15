@@ -93,6 +93,7 @@ def initial_seed_balancing(settings, crosswalk, control_spec, incidence_table):
         balanced_weights = weights_df['final']
 
         logger.info("Total balanced weights for seed %s = %s" % (seed_id, balanced_weights.sum()))
+        logger.info("Controls: \n %s" % (controls_df))
 
         weight_list.append(balanced_weights)
         sample_weight_list.append(seed_incidence_df['sample_weight'])
