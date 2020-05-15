@@ -238,8 +238,10 @@ def sub_balancing(settings, crosswalk, control_spec, incidence_table):
 
     # the incidence table is siloed by seed geography, se we handle each seed zone in turn
     seed_ids = crosswalk_df[seed_geography].unique()
-    for seed_id in seed_ids:
+    num_seeds = len(seed_ids)
+    for seed_ix, seed_id in enumerate(seed_ids, start=1):
 
+        logger.info("balancing Seed {}/{} ".format(seed_ix, num_seeds))
         # slice incidence and crosswalk tables for this seed zone
         seed_incidence_df = incidence_df[incidence_df[seed_geography] == seed_id]
         seed_crosswalk_df = crosswalk_df[crosswalk_df[seed_geography] == seed_id]
@@ -252,9 +254,9 @@ def sub_balancing(settings, crosswalk, control_spec, incidence_table):
         # only want ones for which there are (non-zero) controls
         parent_ids = parent_controls_df.index.intersection(parent_ids)
 
-        for parent_id in parent_ids:
-
-            logger.info("balancing seed %s, %s %s" % (seed_id, parent_geography, parent_id))
+        num_parent_ids = len(parent_ids)
+        for idx, parent_id in enumerate(parent_ids, start=1):
+            logger.info("balancing {}/{} seed {}, {} {}".format(idx, num_parent_ids, seed_id, parent_geography, parent_id))
 
             initial_weights = weights_df[weights_df[parent_geography] == parent_id]
             initial_weights = initial_weights.set_index(settings.get('household_id_col'))
